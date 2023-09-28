@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0"
+		/>
+		<title>Document</title>
+		<link
+			rel="stylesheet"
+			href="style.css"
+		/>
+		<link
+			rel="stylesheet"
+			href="output.css"
+		/>
+		<script src="https://cdn.tailwindcss.com"></script>
+
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.5/jszip.min.js"></script>
+	</head>
+	<body>
+		<!-- <div class="bg-blue-500 text-white p-4">Hello Taiwind</div> -->
+		<div class="btn-gp space-x-5 mt-5 ml-2">
+			<button
+				id="prevButton"
+				class="rounded-lg hover:bg-blue-950 focus:ring shadow drop-shadow border-2 p-2 bg-blue-900 text-white"
+			>
+				Previous Page
+			</button>
+			<button
+				id="nextButton"
+				class="rounded-lg hover:bg-blue-950 focus:ring shadow drop-shadow border-2 p-2 bg-blue-900 text-white"
+			>
+				Next Page
+			</button>
+		</div>
+		<div class="btn-gp space-x-5 container mt-5 ml-2">
+			<button
+				id="decreaseFontSizeButton"
+				class="rounded-lg hover:bg-blue-950 focus:ring shadow drop-shadow border-2 p-2 bg-blue-900 text-white"
+			>
+				Decrease Font Size
+			</button>
+			<button
+				id="increaseFontSizeButton"
+				class="rounded-lg hover:bg-blue-950 focus:ring shadow drop-shadow border-2 p-2 bg-blue-900 text-white"
+			>
+				Increase Font Size
+			</button>
+		</div>
+		<div class="btn-gp space-x-5 container mt-5 ml-2">
+			<button
+				id="decreaseLineHeight"
+				class="rounded-lg line-through shadow drop-shadow border-2 p-2 bg-blue-500 text-white"
+			>
+				Decrease Line Height
+			</button>
+			<button
+				id="increaseLineHeight"
+				class="rounded-lg line-through shadow drop-shadow border-2 p-2 bg-blue-500 text-white"
+			>
+				Increase Line Height
+			</button>
+		</div>
+		<div id="area"></div>
+
+		<script
+			src="app.js"
+			type="module"
+		></script>
+	</body>
+</html>

@@ -1,0 +1,22 @@
+@import 'tailwindcss/dist/tailwind.min.css';
+/* @import 'tailwindcss/components';
+@import 'tailwindcss/utilities'; */
+
+body{
+    padding: 0px !important;
+    height: max-content;
+}
+
+/* #area{
+    width: 90%;
+    height: 90vh;
+    margin: 0 auto;
+     border: 2px solid black;
+     padding: 0px;
+} */
+#area svg{
+    margin: 0px;
+    padding: 0px;
+    width: 100%;
+    height: auto;
+}

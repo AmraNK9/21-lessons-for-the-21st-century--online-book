@@ -20,10 +20,19 @@ function changeFontSize(fontSize) {
 	rendition.themes.fontSize(fontSize);
 }
 
-function changeLineSpacing( lineHeight) {
-	rendition.themes.register({ "body": { "color": "white"},"epub-view":{"line-height":"400"}})
-	console.log("success")
+function changeLineHeight(lineHeight) {
+    rendition.themes.default({
+		h2: {
+		  'font-size': '32px',
+		  color: 'purple'
+		},
+		p: {
+		  "margin": '10px',
+		  "line-height":lineHeight
+		}
+	  });
   }
+  
   
 
 let fontSize = 16;
@@ -51,9 +60,47 @@ prevButton.addEventListener("click", prevPage);
 let lineHeight = 10
 document.querySelector("#increaseLineHeight").addEventListener("click",()=>{
 	lineHeight+= 5;
-	changeLineSpacing(lineHeight + 'px')
+	changeLineHeight(lineHeight + 'px')
 })
 document.querySelector("#decreaseLineHeight").addEventListener("click",()=>{
 	lineHeight-= 5;
-	changeLineSpacing(lineHeight + 'px')
+	changeLineHeight(lineHeight + 'px')
 })
+
+book.loaded.navigation.then(function(toc){
+	var $nav = document.getElementById("toc"),
+		docfrag = document.createDocumentFragment();
+	var addTocItems = function (parent, tocItems) {
+	  var $ul = document.createElement("ul");
+	  tocItems.forEach(function(chapter) {
+		var item = document.createElement("li");
+		item.classList.add("opcion-con-desplegable")
+		var link = document.createElement("a");
+		link.textContent = chapter.label;
+		link.href = chapter.href;
+		item.appendChild(link);
+
+		if (chapter.subitems) {
+		  addTocItems(item, chapter.subitems)
+		}
+
+		link.onclick = function(){
+		  var url = link.getAttribute("href");
+		  rendition.display(url);
+		  return false;
+		};
+
+		$ul.appendChild(item);
+	  });
+	  parent.appendChild($ul);
+	};
+
+	addTocItems(docfrag, toc);
+
+	$nav.appendChild(docfrag);
+
+	if ($nav.offsetHeight + 60 < window.innerHeight) {
+	  $nav.classList.add("fixed");
+	}
+
+  });

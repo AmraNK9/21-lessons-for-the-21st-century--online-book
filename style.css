@@ -20,3 +20,12 @@ body{
     width: 100%;
     height: auto;
 }
+/* #toc{
+    z-index: 999;
+    position: fixed;
+    margin: 0;
+    height: 100vh;
+    width: 40vw;
+    top :0;
+    overflow-y: scroll;
+} */

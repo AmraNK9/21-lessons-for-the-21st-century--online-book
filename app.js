@@ -1,13 +1,50 @@
+// import  from "./node_modules/epubjs/dist/epub.js"; 
+// import { Layout } from "./node_modules/epubjs/dist/epub.legacy.js";
+
 import * as epubjs from "./node_modules/epubjs/dist/epub.js";
-// Define the URL of the EPUB file you want to display
-const epubUrl = "book.epub";
-const viewerElement = document.getElementById("area");
+var params = URLSearchParams && new URLSearchParams(document.location.search.substring(1));
+var url = params && params.get("url") && decodeURIComponent(params.get("url"));
+var currentSectionIndex = (params && params.get("loc")) ? params.get("loc") : undefined;
 
-// Load the EPUB file
-const book = ePub(epubUrl);
-const rendition = book.renderTo(viewerElement, {});
-const displayed = rendition.display();
+// Load the opf
+var book = ePub(url || "book.epub");
+var rendition = book.renderTo("area", {
+	// manager: "continuous",
+	flow: "scrolled",
+	width: "100%",
+	height: "100%"
+  });
+var displayed = rendition.display(currentSectionIndex);
 
+
+displayed.then(function(renderer){
+  // -- do stuff
+});
+
+// Navigation loaded
+book.loaded.navigation.then(function(toc){
+  // console.log(toc);
+});
+
+
+
+//   rendition.layout({flow:"scrolled"})
+rendition.themes.default({
+
+	body:{
+		"overflow-x":"hidden",
+		// "background-color":"#111"
+	},
+	h2: {
+		"font-size": "32px",
+		color: "purple",
+	},
+	p: {
+		margin: "10px",
+		"line-height": "35px",
+		// "color":"#fff"
+	},
+});
 function nextPage() {
 	rendition.next();
 }
@@ -21,19 +58,17 @@ function changeFontSize(fontSize) {
 }
 
 function changeLineHeight(lineHeight) {
-    rendition.themes.default({
+	rendition.themes.default({
 		h2: {
-		  'font-size': '32px',
-		  color: 'purple'
+			"font-size": "32px",
+			color: "purple",
 		},
 		p: {
-		  "margin": '10px',
-		  "line-height":lineHeight
-		}
-	  });
-  }
-  
-  
+			margin: "10px",
+			"line-height": lineHeight,
+		},
+	});
+}
 
 let fontSize = 16;
 const increaseFontSizeButton = document.getElementById(
@@ -57,42 +92,43 @@ nextButton.addEventListener("click", nextPage);
 const prevButton = document.getElementById("prevButton");
 prevButton.addEventListener("click", prevPage);
 
-let lineHeight = 10
-document.querySelector("#increaseLineHeight").addEventListener("click",()=>{
-	lineHeight+= 5;
-	changeLineHeight(lineHeight + 'px')
-})
-document.querySelector("#decreaseLineHeight").addEventListener("click",()=>{
-	lineHeight-= 5;
-	changeLineHeight(lineHeight + 'px')
-})
+let lineHeight = 35;
+document.querySelector("#increaseLineHeight").addEventListener("click", () => {
+	lineHeight += 5;
+	changeLineHeight(lineHeight + "px");
+});
+document.querySelector("#decreaseLineHeight").addEventListener("click", () => {
+	lineHeight -= 5;
+	changeLineHeight(lineHeight + "px");
+});
 
-book.loaded.navigation.then(function(toc){
+book.loaded.navigation.then(function (toc) {
 	var $nav = document.getElementById("toc"),
 		docfrag = document.createDocumentFragment();
 	var addTocItems = function (parent, tocItems) {
-	  var $ul = document.createElement("ul");
-	  tocItems.forEach(function(chapter) {
-		var item = document.createElement("li");
-		item.classList.add("opcion-con-desplegable")
-		var link = document.createElement("a");
-		link.textContent = chapter.label;
-		link.href = chapter.href;
-		item.appendChild(link);
+		var $ul = document.createElement("ul");
+		tocItems.forEach(function (chapter) {
+			var item = document.createElement("li");
+			item.classList.add("opcion-con-desplegable");
+			var link = document.createElement("a");
+			link.textContent = chapter.label;
+			link.href = chapter.href;
+			link.className += " block p-2 hover:bg-gray-700 flex items-center";
+			item.appendChild(link);
 
-		if (chapter.subitems) {
-		  addTocItems(item, chapter.subitems)
-		}
+			if (chapter.subitems) {
+				addTocItems(item, chapter.subitems);
+			}
 
-		link.onclick = function(){
-		  var url = link.getAttribute("href");
-		  rendition.display(url);
-		  return false;
-		};
+			link.onclick = function () {
+				var url = link.getAttribute("href");
+				rendition.display(url);
+				return false;
+			};
 
-		$ul.appendChild(item);
-	  });
-	  parent.appendChild($ul);
+			$ul.appendChild(item);
+		});
+		parent.appendChild($ul);
 	};
 
 	addTocItems(docfrag, toc);
@@ -100,7 +136,106 @@ book.loaded.navigation.then(function(toc){
 	$nav.appendChild(docfrag);
 
 	if ($nav.offsetHeight + 60 < window.innerHeight) {
-	  $nav.classList.add("fixed");
+		$nav.classList.add("fixed");
+	}
+});
+
+book.loaded.metadata.then(function(meta){
+	var $title = document.getElementById("title");
+	var $author = document.getElementById("author");
+	var $cover = document.getElementById("cover");
+
+	$title.textContent = meta.title;
+	$author.textContent = meta.creator;
+	if (book.archive) {
+	  book.archive.createUrl(book.cover)
+		.then(function (url) {
+		  $cover.src = url;
+		})
+	} else {
+	  $cover.src = book.cover;
 	}
 
   });
+
+document.getElementById("menu").addEventListener("click", () => {
+	document.querySelector("aside").classList.toggle("hide");
+});
+
+let children = document.querySelector("aside").children;
+let firstchild = document.querySelector("aside").firstElementChild;
+
+let showMenu =function() {
+
+
+	// Convert children to an array and iterate
+	Array.from(children).forEach((value) => {
+		if (value === firstchild) {
+			console.log("first", value);
+		} else {
+			console.log("not first", value);
+			value.style.display = "none";
+		}
+		document.querySelector("#toc").style.display = "block";
+	});
+}
+
+let showSetting = function () {
+
+
+	// Convert children to an array and iterate
+	Array.from(children).forEach((value) => {
+		if (value === firstchild) {
+			console.log("first", value);
+		} else {
+			console.log("not first", value);
+			value.style.display = "none";
+		}
+		document.querySelector("#setting").style.display = "block";
+	});
+}
+
+let showDownload = function () {
+	Array.from(children).forEach((value) => {
+		if (value === firstchild) {
+			console.log("first", value);
+		} else {
+			console.log("not first", value);
+			value.style.display = "none";
+		}
+		document.querySelector("#download-content").style.display = "block";
+	});
+}
+
+let showInfo = function (){
+	Array.from(children).forEach((value) => {
+		if (value === firstchild) {
+			console.log("first", value);
+		} else {
+			console.log("not first", value);
+			value.style.display = "none";
+		}
+		document.querySelector("#info-content").style.display = "block";
+	});
+}
+document.getElementById("setting-btn").addEventListener('click',()=>{
+	showSetting()
+})
+
+document.getElementById("show-menu").addEventListener('click',()=>{
+	showMenu()
+})
+
+document.getElementById("download").addEventListener("click",()=>{
+	showDownload()
+})
+
+document.getElementById("info").addEventListener("click",()=>{
+	showInfo()
+})
+showMenu()
+
+document.addEventListener("DOMContentLoaded",()=>{
+	const loaderContainer = document.querySelector('.loader-container');
+	loaderContainer.parentNode.removeChild(loaderContainer);
+})

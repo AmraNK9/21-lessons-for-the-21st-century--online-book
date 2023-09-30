@@ -1,12 +1,17 @@
 @import 'tailwindcss/dist/tailwind.min.css';
 /* @import 'tailwindcss/components';
 @import 'tailwindcss/utilities'; */
-
+*{
+    overflow-x: hidden;
+}
 body{
     padding: 0px !important;
     height: max-content;
 }
-
+/* .margin{
+    margin-left: 256px;
+    padding: 0px;
+} */
 /* #area{
     width: 90%;
     height: 90vh;
@@ -14,11 +19,23 @@ body{
      border: 2px solid black;
      padding: 0px;
 } */
-#area svg{
-    margin: 0px;
+/* .btn-gp{
+    margin-left: 256px;
+} */
+/* .scale-custom-1{
+    transform: scaleX(-1);
+} */
+#area {
+    /* margin-left: 256px; */
     padding: 0px;
-    width: 100%;
+    /* width: 100%; */
     height: auto;
+    transition: .4s ease-in-out;
+    overflow-x: hidden;
+
+}
+.epub-container{
+    overflow-x: hidden !important;
 }
 /* #toc{
     z-index: 999;
@@ -29,3 +46,51 @@ body{
     top :0;
     overflow-y: scroll;
 } */
+svg{
+    color: white;
+}
+aside{
+    transition: .4s ease-in-out;
+}
+.hide{
+    margin-left: -256px;
+}
+.hide-area{
+    margin-left: 0px;
+}
+.loader-container {
+    position: fixed;
+    width: 100vw;
+    display: flex;
+    background-color: white;
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+.watermark {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5; /* Adjust watermark opacity */
+    font-size: 2rem; /* Adjust watermark font size */
+    color: #ccc; /* Adjust watermark color */
+    pointer-events: none; /* Allow clicks through the watermark */
+  }
+
+  .creator-info {
+    /* position: fixed; */
+    /* bottom: 0;
+    left: 0; */
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Adjust the background color and opacity */
+    color: rgb(163, 162, 162); /* Adjust the text color */
+    padding: 10px;
+    text-align: center;
+    font-size: 10px;
+  }

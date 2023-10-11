@@ -3,15 +3,23 @@
 @import 'tailwindcss/utilities'; */
 *{
     overflow-x: hidden;
+}.calibre{
+    padding: 0 !important;
 }
 body{
     padding: 0px !important;
     height: max-content;
 }
-/* .margin{
-    margin-left: 256px;
-    padding: 0px;
-} */
+.margin{
+    padding:0 auto;
+    /* padding: 0px; */
+}
+.container1{
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    flex-direction: column;
+}
 /* #area{
     width: 90%;
     height: 90vh;

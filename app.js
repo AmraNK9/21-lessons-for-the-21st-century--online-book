@@ -159,6 +159,9 @@ book.loaded.metadata.then(function(meta){
   });
 
 document.getElementById("menu").addEventListener("click", () => {
+	// if(window.outerWidth > 800){
+	// 	document.querySelector(".container1").classList.toggle("margin")
+	// }
 	document.querySelector("aside").classList.toggle("hide");
 });
 
@@ -236,6 +239,12 @@ document.getElementById("info").addEventListener("click",()=>{
 showMenu()
 
 document.addEventListener("DOMContentLoaded",()=>{
-	const loaderContainer = document.querySelector('.loader-container');
-	loaderContainer.parentNode.removeChild(loaderContainer);
+	setTimeout(
+		()=>{
+			const loaderContainer = document.querySelector('.loader-container');
+			loaderContainer.parentNode.removeChild(loaderContainer);
+		},
+		1000
+	)
+
 })
